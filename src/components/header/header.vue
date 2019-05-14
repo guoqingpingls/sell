@@ -62,7 +62,7 @@
 <script>
 import VStar from '../star/star'
 export default {
-  name: 'header',
+  name: 'sell-header',
   components: {
     VStar
   },
@@ -243,6 +243,8 @@ export default {
           text-align: left
           li
             margin: 0 12px 12px 0px
+            display: flex
+            align-items: center
             &:last-child
               margin-bottom: 0
             .icon
@@ -263,7 +265,7 @@ export default {
               &.special
                 bg-img('./images/special_2')
             .text
-              font-size: 16px
+              font-size: 12px
               line-height: 16px
         .bulletin
           width: 80%

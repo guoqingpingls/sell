@@ -5,6 +5,7 @@
         <li v-for='(item, index) in goods' :key='index' class='menu-item'>
           <span class='text'>
             <span v-show='item.type > 0' class='icon' :class='iconMaps[item.type]'></span>
+            <span class='special'></span>
             <span>{{ item.name }}</span>
           </span>
         </li>
@@ -33,6 +34,7 @@ export default {
       res = res.body
       if (res.errno === ERR_OK) {
         this.goods = res.data
+        console.log(this.goods)
       }
     })
   }
