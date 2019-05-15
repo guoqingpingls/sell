@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import goods from 'components/goods/goods'
-import seller from 'components/seller/seller'
-import ratings from 'components/ratings/ratings'
+// import goods from 'components/goods/goods'
+// import seller from 'components/seller/seller'
+// import ratings from 'components/ratings/ratings'
 Vue.use(Router)
 
 export default new Router({
@@ -13,12 +13,12 @@ export default new Router({
     redirect: '/goods'
   }, {
     path: '/goods',
-    component: goods
+    component: () => import('components/goods')
   }, {
     path: '/seller',
-    component: seller
+    component: () => import('components/seller')
   }, {
     path: '/ratings',
-    component: ratings
+    component: () => import('components/ratings')
   }]
 })
