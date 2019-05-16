@@ -1,8 +1,8 @@
 <template>
   <div class='goods'>
-    <div class='menu-wrap'>
+    <div class='menu-wrap' ref='goodTypes'>
       <ul>
-        <li v-for='(item, index) in goods' :key='index' class='menu-item'>
+        <li v-for='(item, index) in goods' :key='index' class='menu-item' :class="{active: index === +activeIndex}" @click='selectItem(index, $event)'>
           <span class='text'>
             <span class='icon' :class='iconMaps[item.type]'></span>
             <span class='special'></span>
@@ -11,25 +11,27 @@
         </li>
       </ul>
     </div>
-    <div class='foods-wrap'>
-      <div v-for="(item, index) in goods" class='item-wrapper' :key="index">
-        <div class="title"><span class='ver-line'></span>{{item.name}}</div>
-        <div v-for="(food, idx) in item.foods" :key="idx" class="goods-wrapper" >
-          <img :src="food.icon" class='food-icon'>
-          <div class='food-detail'>
-            <span class='food-name'>{{food.name}}</span>
-            <span class='food-des'>{{food.description}}</span>
-            <span class='detail'>
-              <span class='count'>月售{{food.sellCount}}份</span>
-              <span class='rating'>好评率{{food.rating}}%</span>
-            </span>
-            <div class='price-detail'>
-              <div class='price-left'>
-                <span class='price'><span class='unit'>￥</span>{{food.price}}</span>
-                <span class='pre-price'><span class='unit'>￥</span>{{food.oldPrice || 10}}</span>
-              </div>
-              <div class='price-right'>
-                
+    <div ref='goodLists'>
+      <div class='foods-wrap'>
+        <div v-for="(item, index) in goods" class='item-wrapper' :key="index">
+          <div class="title"><span class='ver-line'></span>{{item.name}}</div>
+          <div v-for="(food, idx) in item.foods" :key="idx" class="goods-wrapper" >
+            <img :src="food.icon" class='food-icon'>
+            <div class='food-detail'>
+              <span class='food-name'>{{food.name}}</span>
+              <span class='food-des'>{{food.description}}</span>
+              <span class='detail'>
+                <span class='count'>月售{{food.sellCount}}份</span>
+                <span class='rating'>好评率{{food.rating}}%</span>
+              </span>
+              <div class='price-detail'>
+                <div class='price-left'>
+                  <span class='price'><span class='unit'>￥</span>{{food.price}}</span>
+                  <span class='pre-price'><span class='unit'>￥</span>{{food.oldPrice || 10}}</span>
+                </div>
+                <div class='price-right'>
+                  
+                </div>
               </div>
             </div>
           </div>
@@ -40,6 +42,7 @@
 </template>
 <script>
 const ERR_OK = 0
+import BScroll from 'better-scroll'
 export default {
   name: 'goods',
   props: {
@@ -49,7 +52,12 @@ export default {
   },
   data () {
     return {
-      goods: []
+      goods: [],
+      goodTypesScroll: null,
+      goodListScroll: null,
+      listHeight: [],
+      clickEvent: false,
+      activeIndex: 0
     }
   },
   created () {
@@ -61,6 +69,68 @@ export default {
         console.log(this.goods)
       }
     })
+  },
+  mounted () {
+    // this.$nextTick(() => {
+    //   this.initScroll()
+    //   this.getHeight()
+    // })
+    this.initScroll()
+    this.getHeight()
+  },
+  computed: {
+    activeIndex () {
+      for (let i = 0; i < this.listHeight.length; i++) {
+        let heightTop = this.listHeight[i]
+        let heightBottom = this.listHeight[i + 1]
+        // 如果存在heightTop 和heightBottom之间 或者是不存在heightBottom(在最后一个type的列表里面) 直接return i
+        if (!heightBottom || (heightTop <= this.scrollY && this.scrollY < heightBottom)) {
+          if (this.clickEvent) {
+            return i + 1
+          } else {
+            return i
+          }
+        }
+        // lineHeight不存在 return 0
+        return 0
+      }
+    }
+  },
+  methods: {
+    initScroll () {
+      this.goodTypesScroll = new BScroll(this.$refs.goodTypes, {
+        click: true
+      })
+      this.goodListScroll = new BScroll(this.$refs.goodLists, {
+        probeType: 3
+      })
+      this.goodListScroll.on('scroll', (pos) => {
+        console.log(pos)
+        this.scrollY = Math.abs(Math.round(pos.y))
+      })
+    },
+    // 获取高度
+    getHeight () {
+      let rightItem = this.$refs.goodLists.getElementsByClassName('item-wrapper')
+      let height = 0
+      this.listHeight.push(height)
+      rightItem.forEach((item) => {
+        height += item.clientHeight
+        this.listHeight.push(height)
+      })
+    },
+    // 点选左边类型
+    selectItem (index, e) {
+      this.clickEvent = true
+      this.activeIndex = index
+      if (!e._constructed) {
+        return
+      } else {
+        let elList = this.$refs.goodLists.getElementsByClassName('item-wrapper')
+        let el = elList[index]
+        this.goodListScroll.scrollToElement(el, 300)
+      }
+    }
   }
 }
 </script>
@@ -78,6 +148,15 @@ export default {
     width: 80px
     background-color: #f3f5f7
     .menu-item
+      // display: flex
+      // align-items: center
+      // justify-content: center
+      // width: 54px
+      // height: 56px
+      // font-size: 12px
+      // line-height: 14px
+      // border-1px(rgba(7, 17, 27, 0.1))
+      // margin-left: 12px
       display: flex
       align-items: center
       justify-content: center
@@ -85,8 +164,13 @@ export default {
       height: 56px
       font-size: 12px
       line-height: 14px
-      border-1px(rgba(7, 17, 27, 0.1))
-      margin-left: 12px
+      position: relative
+      width: 100%
+      padding-left: 12px
+      padding-right: 12px
+      box-sizing: border-box
+      &.active
+        background-color: #fff
       .text
         .icon
           display inline-block
