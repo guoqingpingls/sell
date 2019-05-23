@@ -4,8 +4,9 @@
       <ul>
         <li v-for='(item, index) in goods' :key='index' class='menu-item' :class="{active: index === +activeIndex}" @click='selectItem(index, $event)'>
           <span class='text'>
-            <span class='icon' :class='iconMaps[item.type]'></span>
-            <span class='special'></span>
+            <!-- <span class='icon' :class='iconMaps[item.type]'></span> -->
+            <icon-map :iconType='iconMaps[item.type]' />
+            <!-- <span class='special'></span> -->
             <span>{{ item.name }}</span>
           </span>
         </li>
@@ -43,12 +44,16 @@
 <script>
 const ERR_OK = 0
 import BScroll from 'better-scroll'
+import iconMap from 'components/iconMap'
 export default {
   name: 'goods',
   props: {
     seller: {
       type: Object
     }
+  },
+  components: {
+    iconMap
   },
   data () {
     return {
@@ -61,7 +66,7 @@ export default {
     }
   },
   created () {
-    this.iconMaps = ['discount', 'decrease', 'special', 'invoice', 'guarantee']
+    this.iconMaps = ['discount', 'decrease', 'special_3', 'invoice', 'guarantee']
     this.$http.get('./api/goods').then((res) => {
       res = res.body
       if (res.errno === ERR_OK) {
@@ -176,15 +181,15 @@ export default {
       &.active
         background-color: #fff
       .text
-        .icon
-          display inline-block
-          &.special
-            width: 12px
-            height: 12px
-            margin-right: 2px
-            vertical-align: top
-            bg-img('./images/special_3')
-            background-size: 12px
+        // .icon
+        //   display inline-block
+        //   &.special
+        //     width: 12px
+        //     height: 12px
+        //     margin-right: 2px
+        //     vertical-align: top
+        //     bg-img('./images/special_3')
+        //     background-size: 12px
   .foods-wrap
     flex: 1
     .item-wrapper

@@ -13,12 +13,12 @@ export default new Router({
     redirect: '/goods'
   }, {
     path: '/goods',
-    component: () => import('components/goods')
+    component: () => import('@/views/goods')
   }, {
     path: '/seller',
-    component: () => import('components/seller')
+    component: () => import('@/views/seller')
   }, {
     path: '/ratings',
-    component: () => import('components/ratings')
+    component: () => import('@/views/ratings')
   }]
 })

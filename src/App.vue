@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import VHeader from './components/header'
+import VHeader from 'components/header'
 const ERR_OK = 0
 export default {
   name: 'app',
