@@ -57,7 +57,7 @@ export default {
       goodListScroll: null,
       listHeight: [],
       clickEvent: false,
-      activeIndex: 0
+      scrollY: 0
     }
   },
   created () {
@@ -67,6 +67,10 @@ export default {
       if (res.errno === ERR_OK) {
         this.goods = res.data
         console.log(this.goods)
+        this.$nextTick(() => {
+          this.initScroll()
+          this.getHeight()
+        })
       }
     })
   },
@@ -75,24 +79,26 @@ export default {
     //   this.initScroll()
     //   this.getHeight()
     // })
-    this.initScroll()
-    this.getHeight()
+
   },
   computed: {
     activeIndex () {
+      console.log(this.scrollY)
       for (let i = 0; i < this.listHeight.length; i++) {
         let heightTop = this.listHeight[i]
         let heightBottom = this.listHeight[i + 1]
         // 如果存在heightTop 和heightBottom之间 或者是不存在heightBottom(在最后一个type的列表里面) 直接return i
         if (!heightBottom || (heightTop <= this.scrollY && this.scrollY < heightBottom)) {
-          if (this.clickEvent) {
-            return i + 1
-          } else {
-            return i
-          }
+          // if (this.clickEvent) {
+          //   return i + 1
+          // } else {
+          //   return i
+          // }
+          return i
+        } else {
+          // lineHeight不存在 return 0
+          return 0
         }
-        // lineHeight不存在 return 0
-        return 0
       }
     }
   },
@@ -105,7 +111,6 @@ export default {
         probeType: 3
       })
       this.goodListScroll.on('scroll', (pos) => {
-        console.log(pos)
         this.scrollY = Math.abs(Math.round(pos.y))
       })
     },
@@ -114,15 +119,14 @@ export default {
       let rightItem = this.$refs.goodLists.getElementsByClassName('item-wrapper')
       let height = 0
       this.listHeight.push(height)
-      rightItem.forEach((item) => {
-        height += item.clientHeight
+      for (let i = 0; i < rightItem.length; i++) {
+        height += rightItem[i].clientHeight
         this.listHeight.push(height)
-      })
+      }
     },
     // 点选左边类型
     selectItem (index, e) {
       this.clickEvent = true
-      this.activeIndex = index
       if (!e._constructed) {
         return
       } else {
@@ -216,7 +220,7 @@ export default {
         .food-des
           font-size: 10px
           color: rgb(147, 153, 159)
-          line-height: 10px
+          line-height: 12px
         .detail
           font-size: 10px
           color: rgb(147, 153, 159)
