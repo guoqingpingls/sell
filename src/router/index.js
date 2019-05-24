@@ -8,17 +8,22 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   linkActiveClass: 'active',
-  routes: [{
-    path: '/',
-    redirect: '/goods'
-  }, {
-    path: '/goods',
-    component: () => import('@/views/goods')
-  }, {
-    path: '/seller',
-    component: () => import('@/views/seller')
-  }, {
-    path: '/ratings',
-    component: () => import('@/views/ratings')
-  }]
+  routes: [
+    {
+      path: '/',
+      redirect: '/goods'
+    },
+    {
+      path: '/goods',
+      component: () => import('@/views/goods')
+    },
+    {
+      path: '/seller',
+      component: () => import('@/views/seller')
+    },
+    {
+      path: '/ratings',
+      component: () => import('@/views/ratings')
+    }
+  ]
 })

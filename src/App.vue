@@ -21,9 +21,6 @@
       </div>
     </div>
     <router-view></router-view>
-    <div class='footer'>
-      I am footer
-    </div>
   </div>
 </template>
 

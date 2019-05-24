@@ -4,12 +4,14 @@
       <img class='avatar' width='64' height='64' :src='seller.avatar'/>
       <div class='content'>
         <div class='brand-wrap'>
-          <span class='brand'></span>
+          <!-- <span class='brand'></span> -->
+          <icon-map iconType="brand" />
           <span class='name'>{{ seller.name }}</span>
         </div>
         <span class='description'>{{ seller.description }}/{{ seller.deliveryTime }}分钟到达</span>
         <div v-if='seller.supports' class='support-wrap'>
-          <span class='icon' :class='iconMaps[seller.supports[0].type]'></span>
+          <!-- <span class='icon' :class='iconMaps[seller.supports[0].type]'></span> -->
+          <icon-map size='1' :iconType="iconMaps[seller.supports[0].type]" />
           <span class='support-description'>{{ seller.supports[0].description }}</span>
         </div>
         <div v-if='seller.supports' class='discount-wrap' @click='showDetail'>
@@ -19,7 +21,7 @@
       </div>
     </div>
     <div class='bulletin-wrap' @click='showDetail'>
-      <span class='bulletin-img'></span><span class='bulletin-title'>{{ seller.bulletin }}</span>
+      <icon-map iconType="bulletin" /><span class='bulletin-title'>{{ seller.bulletin }}</span>
       <span class='icon-keyboard_arrow_right'></span>
     </div>
     <div>
@@ -39,7 +41,8 @@
           </div>
           <ul v-if='seller.supports' class='supports'>
             <li v-for='(item, index) in seller.supports' :key='index'>
-              <span class='icon' :class='iconMaps[seller.supports[index].type]'></span>
+              <!-- <span class='icon' :class='iconMaps[seller.supports[index].type]'></span> -->
+              <icon-map size='2' :iconType="iconMaps[seller.supports[index].type]" />
               <span class='text'>{{ seller.supports[index].description }}</span>
             </li>
           </ul>
@@ -48,7 +51,7 @@
             <div class='text'>商家公告</div>
             <div class='line'></div>
           </div>
-          <div class='bulletin'>
+          <div class='bulletin-content'>
             <p class='text'>{{ seller.bulletin}}</p>
           </div>
         </div>
@@ -61,10 +64,12 @@
 </template>
 <script>
 import VStar from '../star/star'
+import iconMap from 'components/iconMap'
 export default {
   name: 'sell-header',
   components: {
-    VStar
+    VStar,
+    iconMap
   },
   props: {
     seller: {
@@ -110,45 +115,18 @@ export default {
       margin-top: 2px
       .brand-wrap
         margin-bottom: 8px
-        .brand
-          display: inline-block
-          vertical-align: top
-          width: 30px
-          height: 18px
-          bg-img('./images/brand')
-          background-size: 30px 18px
-          margin-right: 6px
+        display: flex
         .name
           font-size: 16px
           font-weight: bold
           line-height: 18px
+          margin-left: 6px
       .description
         font-size: 12px
         line-height: 12px
         display: inline-block
         margin-bottom: 10px
       .support-wrap
-        .icon
-          display inline-block
-          width: 12px
-          height: 12px
-          margin-right: 4px
-          vertical-align: top
-          &.decrease
-            bg-img('./images/decrease_1')
-            background-size: 12px
-          &.discount
-            bg-img('./images/discount_1')
-            background-size: 12px
-          &.guarantee
-            bg-img('./images/guarantee_1')
-            background-size: 12px
-          &.invioce
-            bg-img('./images/invoice_1')
-            background-size: 12px
-          &.special
-            bg-img('./images/special_1')
-            background-size: 12px
         .support-description
           font-size: 10px
           line-height: 12px
@@ -170,31 +148,23 @@ export default {
           line-height: 24px
           margin-left: 2px
   .bulletin-wrap
-    height: 28px
-    line-height: 28px
-    padding: 0px 12px 0px 22px
-    overflow: hidden
-    text-overflow: ellipsis
-    white-space: nowrap
-    background-color: rgba(7,17,27,0.2)
-    position: relative
-    .bulletin-img
-      display: inline-block
-      width: 22px
-      height: 12px
-      bg-img('./images/bulletin')
-      background-size: 22px 12px
-      background-repeat: no-repeat
-      margin-right: 4px
-      vertical-align: top
-      margin-top: 8px
+    height: 28px;
+    line-height: 28px;
+    padding: 0px 12px 0px 22px;
+    overflow: hidden;
+    background-color: rgba(7,17,27,0.2);
+    display: flex;
+    align-items: center;
     .bulletin-title
-      font-size: 10px
+      font-size: 10px;
+      flex: 1;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding-left: 4px;
     .icon-keyboard_arrow_right
       font-size: 10px
-      position: absolute
-      right: 12px
-      top: 9px
   .header-bg-image
     position: absolute
     top: 0
@@ -247,27 +217,11 @@ export default {
             align-items: center
             &:last-child
               margin-bottom: 0
-            .icon
-              display: inline-block
-              width: 16px
-              height: 16px
-              background-size: 16px
-              background-repeat: no-repeat
-              margin-right: 6px
-              &.decrease
-                bg-img('./images/decrease_1')
-              &.discount
-                bg-img('./images/discount_2')
-              &.guarantee
-                bg-img('./images/guarantee_2')
-              &.invoice
-                bg-img('./images/invoice_2')
-              &.special
-                bg-img('./images/special_2')
             .text
               font-size: 12px
               line-height: 16px
-        .bulletin
+              margin-left: 6px
+        .bulletin-content
           width: 80%
           margin: 0 auto
           text-align: left
