@@ -34,7 +34,7 @@ export default {
       if (hasDecimal) {
         result.push(STAR_HALF)
       }
-      while (result.length === TOTAL_STAR) {
+      while (result.length < TOTAL_STAR) {
         result.push(STAR_OFF)
       }
       return result
@@ -68,7 +68,7 @@ export default {
         .star-item
             width: 15px
             height: 15px
-            margin-right: 16px
+            margin-right: 7px
             background-size: 15px 15px
             &:last-child
                 margin-right: 0

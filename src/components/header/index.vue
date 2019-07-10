@@ -63,7 +63,7 @@
   </div>
 </template>
 <script>
-import VStar from '../star/star'
+import VStar from 'components/star'
 import iconMap from 'components/iconMap'
 export default {
   name: 'sell-header',
